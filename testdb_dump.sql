@@ -68,3 +68,18 @@ CREATE TABLE testdb.user_roles (
   KEY `fk_role_idx` (`role`),
   CONSTRAINT `fk_role` FOREIGN KEY (`role`) REFERENCES `roles` (`role`)); 
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- Insert Queries for users table
+INSERT INTO users(`username`, `password`, `enabled`) VALUES ('user', 'password', 1);
+INSERT INTO users(`username`, `password`, `enabled`) VALUES ('admin', 'password', 1);
+INSERT INTO users(`username`, `password`, `enabled`) VALUES ('super_admin', 'password', 1);
+
+-- Insert Queries for roles table
+INSERT INTO roles(`role`) VALUES ('USER');
+INSERT INTO roles(`role`) VALUES ('ADMIN');
+INSERT INTO roles(`role`) VALUES ('SUPER_ADMIN');
+
+-- Insert Queries for user_roles table
+INSERT INTO user_roles(`username`, `role`) VALUES ('user', 'USER');
+INSERT INTO user_roles(`username`, `role`) VALUES ('admin', 'ADMIN');
+INSERT INTO user_roles(`username`, `role`) VALUES ('super_admin', 'SUPER_ADMIN');
