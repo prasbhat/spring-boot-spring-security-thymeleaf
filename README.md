@@ -22,5 +22,13 @@ thymeleaf-extras-springsecurity4 <br/>
 Maven 3 <br/>
 Java 8 <br/>
 
-# Version 1: Using in-memory database
-Create Users using inMemoryAuthentication() method.
+# Version 1: Using inMemoryAuthentication
+Create Users locally in the code and authenticate using inMemoryAuthentication() method.
+
+# Version 2: Using MySQL database and jdbcAuthentication
+Create Users in MySQL database and authenticate using jdbcAuthentication() method.
+
+<b>Technologies used (in addition to the above) :</b>
+
+spring-boot-starter-jdbc <br/>
+mysql-connector-java <br/>
