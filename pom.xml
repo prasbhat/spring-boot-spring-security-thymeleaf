@@ -50,6 +50,20 @@
             <artifactId>bootstrap</artifactId>
             <version>3.3.7</version>
         </dependency>
+
+        <!-- Version 2: For pointing to database-->
+        <!-- Spring JDBC -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- End of adding for Version 2: For pointing to database-->
     </dependencies>
     <build>
         <plugins>

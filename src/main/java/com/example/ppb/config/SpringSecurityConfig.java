@@ -18,6 +18,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
 
+    //Version - 2: Pointing to database
+    @Autowired
+    private DataSource datasource;
+
     // roles admin allow to access /admin/**
     // roles user allow to access /user/**
     // roles super_admin allow to access /super_admin/**
@@ -27,20 +31,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/about").permitAll()
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/user/**").hasAuthority("USER")
-                .antMatchers("/super_user/**").hasAuthority("SUPER_USER")
-                    .anyRequest().authenticated()
+                    .antMatchers("/", "/home", "/about").permitAll()
+                    .antMatchers("/admin/**").hasAuthority("ADMIN")
+                    .antMatchers("/user/**").hasAuthority("USER")
+                    .antMatchers("/super_user/**").hasAuthority("SUPER_USER")
+                        .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                    .loginPage("/login")
+                    .formLogin()
+                        .loginPage("/login")
+                        .permitAll()
+                .and()
+                    .logout()
                     .permitAll()
                 .and()
-                .logout()
-                    .permitAll()
-                .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+                    .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
     }
 
 
@@ -48,14 +52,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
         //Spring Security - Version 1 : Using In-memory database
-        auth.inMemoryAuthentication()
-                .withUser("user").password("password").authorities("USER")
-                .and()
-                .withUser("admin").password("password").authorities("ADMIN")
-                .and()
-                .withUser("super_admin").password("password").authorities("SUPER_ADMIN");
+//        auth.inMemoryAuthentication()
+//                .withUser("user").password("password").authorities("USER")
+//                .and()
+//                .withUser("admin").password("password").authorities("ADMIN")
+//                .and()
+//                .withUser("super_admin").password("password").authorities("SUPER_ADMIN");
 
-
+        //Spring Security - Version 2 : Adding Datasource from database
+        auth.jdbcAuthentication()
+                .dataSource(datasource)
+                .usersByUsernameQuery("select username,password, enabled from users where username=?")
+                .authoritiesByUsernameQuery("select username, role from user_roles where username=?");
     }
 
     /*
