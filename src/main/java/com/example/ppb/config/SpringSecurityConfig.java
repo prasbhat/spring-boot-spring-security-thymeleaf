@@ -1,10 +1,14 @@
 package com.example.ppb.config;
 
+import com.example.ppb.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import javax.sql.DataSource;
@@ -21,6 +25,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     //Version - 2: Pointing to database
     @Autowired
     private DataSource datasource;
+
+    //Version 3: For UserDetailsService
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
 
     // roles admin allow to access /admin/**
     // roles user allow to access /user/**
@@ -60,10 +68,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .withUser("super_admin").password("password").authorities("SUPER_ADMIN");
 
         //Spring Security - Version 2 : Adding Datasource from database
-        auth.jdbcAuthentication()
-                .dataSource(datasource)
-                .usersByUsernameQuery("select username,password, enabled from users where username=?")
-                .authoritiesByUsernameQuery("select username, role from user_roles where username=?");
+//        auth.jdbcAuthentication()
+//                .dataSource(datasource)
+//                .usersByUsernameQuery("select username,password, enabled from users where username=?")
+//                .authoritiesByUsernameQuery("select username, role from user_roles where username=?");
+
+        //Version 3: Using UserDetailsService
+        auth.userDetailsService(myUserDetailsService);
     }
 
     /*
@@ -74,14 +85,4 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
     }*/
-
-//    @Bean(name = "dataSource")
-//    public DriverManagerDataSource dataSource() {
-//        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-//        driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/testdb?useSSL=false");
-//        driverManagerDataSource.setUsername("root");
-//        driverManagerDataSource.setPassword("root");
-//        return driverManagerDataSource;
-//    }
 }
